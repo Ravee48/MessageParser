@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 tokenizer = Tokenizer(num_words=10000)
 # Load your model here
-model_path = '/Users/ravee/PythonProjects/MsgParser/MessageParser/Model/best_model_2_500_NoiseNotRemoved'  # Update with your model path
+model_path = './Model/best_model_2_500_NoiseNotRemoved'  # Update with your model path
 model = load_model(model_path)
 
 # Load the tokenizer

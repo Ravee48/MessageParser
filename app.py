@@ -38,7 +38,7 @@ def predict_messages_with_details(input_dict, max_len):
         result = "Transactional" if is_transactional else "Non-Transactional"
         
         transaction_type = None
-        amount = None
+        amount = 0.0
         upi_id = None
         
         if is_transactional:
@@ -46,7 +46,7 @@ def predict_messages_with_details(input_dict, max_len):
             amount_matches = re.findall(r'(?<!\d\.\d{3}\.)Rs?\.?\s*([\d,]+(?:\.\d{2})?)', message)
             upi_id_match = re.search(r'([\w.-]+)@([\w.-]+)', message, re.IGNORECASE)
 
-            amount = amount_matches[0] if amount_matches else None
+            amount = amount_matches[0] if amount_matches else 0.0
             transaction_type = "Credit" if credit_match else "Debit"
             upi_id = upi_id_match[0] if upi_id_match else None
             
@@ -68,5 +68,5 @@ def predict():
     return jsonify(predictions)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000)
+    app.run(host='0.0.0.0', port=8000, debug=True)
     # app.run(debug=False)  # Set debug to False for production

@@ -2,3 +2,7 @@ msg_venv/
 test.ipynb
 main_v5.ipynb
 Data/
+.DS_Store
+NewModels/
+Tokenizer/
+ModelsArchieve/

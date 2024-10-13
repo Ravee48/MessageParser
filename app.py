@@ -15,7 +15,7 @@ tokenizer = None
 def load_model_and_tokenizer():
     global model, tokenizer
     if model is None:
-        model_path = './Model/best_model_2_500_NoiseNotRemoved'
+        model_path = './Model/Model_V4_NoiseNotRemoved'
         model = load_model(model_path)
     
     if tokenizer is None:

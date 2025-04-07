@@ -15,7 +15,7 @@ tokenizer = None
 def load_model_and_tokenizer():
     global model, tokenizer
     if model is None:
-        model_path = './Model/Model_V4_NoiseNotRemoved'
+        model_path = './Model/20250407_best_model_1_138_NoiseNotRemoved.keras'
         model = load_model(model_path)
     
     if tokenizer is None:
@@ -43,19 +43,22 @@ def predict_messages_with_details(input_dict, max_len):
         
         if is_transactional:
             credit_match = re.search(r'\b(credit|transfer|received|transferred|credited)\b', message, re.IGNORECASE)
-            amount_matches = re.findall(r'(?<!\d\.\d{3}\.)(?:Rs?\.?\s*|debited by\s*|credited by\s*)([\d,]+(?:\.\d+)?)', message)    # re.findall(r'(?<!\d\.\d{3}\.)Rs?\.?\s*([\d,]+(?:\.\d{2})?)', message)
+            amount_matches = re.findall(r'(?<!\d\.\d{3}\.)(?:Rs?\.?\s*|INR\.?\s*|USD\.?\s*|debited by\s*|credited by\s*)([\d,]+(?:\.\d+)?)', message)    # re.findall(r'(?<!\d\.\d{3}\.)Rs?\.?\s*([\d,]+(?:\.\d{2})?)', message)
             upi_id_match = re.search(r'([\w.-]+)@([\w.-]+)', message, re.IGNORECASE)
+            ref_no_match = re.findall(r'\bRef\s*No\.?\s+(\d{12})|\bRefNo\.?\s*(\d{12})', message, re.IGNORECASE)
 
             amount = amount_matches[0] if amount_matches else 0.0
             transaction_type = "Credit" if credit_match else "Debit"
             upi_id = upi_id_match[0] if upi_id_match else None
+            ref_no = ref_no_match[0][0] if ref_no_match else None
             
         results[message_id] = {
             "result": result,
             "transaction_type": transaction_type,
             "amount": amount,
             "prediction": float(predictions[i][0]),
-            "upi_id": upi_id
+            "upi_id": upi_id,
+            "ref_no": ref_no
         }
     
     return results

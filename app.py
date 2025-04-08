@@ -15,7 +15,7 @@ tokenizer = None
 def load_model_and_tokenizer():
     global model, tokenizer
     if model is None:
-        model_path = './Model/20250407_best_model_1_138_NoiseNotRemoved.keras'
+        model_path = './Model/20250407_best_model_1_138_NoiseNotRemoved'
         model = load_model(model_path)
     
     if tokenizer is None:

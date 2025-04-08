@@ -4,7 +4,7 @@ from flask import Flask, request, jsonify
 import re
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
-from keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.text import Tokenizer
 import pickle
 
 app = Flask(__name__)
@@ -47,7 +47,20 @@ def predict_messages_with_details(input_dict, max_len):
             upi_id_match = re.search(r'([\w.-]+)@([\w.-]+)', message, re.IGNORECASE)
             ref_no_match = re.findall(r'\bRef\s*No\.?\s+(\d{12})|\bRefNo\.?\s*(\d{12})', message, re.IGNORECASE)
 
-            amount = amount_matches[0] if amount_matches else 0.0
+            # Get currency type to check if it's USD
+            currency_match = re.search(r'(USD)', message, re.IGNORECASE)
+            # If message contains 'USD', convert to INR
+            if amount_matches:
+                # Remove commas and convert to float
+                raw_amount = float(amount_matches[0].replace(',', ''))
+                if currency_match:
+                    amount = round(raw_amount * 86,2)  # Assuming USD to INR conversion
+                else:
+                    amount = raw_amount
+            else:
+                amount = 0.0
+
+            # amount = amount_matches[0] if amount_matches else 0.0
             transaction_type = "Credit" if credit_match else "Debit"
             upi_id = upi_id_match[0] if upi_id_match else None
             ref_no = ref_no_match[0][0] if ref_no_match else None
@@ -66,7 +79,7 @@ def predict_messages_with_details(input_dict, max_len):
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.get_json()
-    max_len = 500  # Set your max_len here
+    max_len = 138  # Set your max_len here
     predictions = predict_messages_with_details(data, max_len)
     return jsonify(predictions)
 

@@ -62,9 +62,15 @@ def predict_messages_with_details(input_dict, max_len):
                 amount = 0.0
 
             # amount = amount_matches[0] if amount_matches else 0.0
-            transaction_type = "Credit" if credit_match else "Debit"
-            upi_id = upi_id_match[0] if upi_id_match else None
-            ref_no = ref_no_match[0][0] if ref_no_match else None
+            try:
+                transaction_type = "Credit" if credit_match else "Debit"
+                upi_id = upi_id_match[0] if upi_id_match else None
+                ref_no = ref_no_match[0][0] if ref_no_match else None
+            except Exception as e:
+                print(f"Error extracting transaction_type, upi_id or ref_no: {e}")
+                transaction_type = None
+                upi_id = None
+                ref_no = None
             
         results[message_id] = {
             "result": result,

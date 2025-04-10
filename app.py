@@ -40,6 +40,7 @@ def predict_messages_with_details(input_dict, max_len):
         transaction_type = None
         amount = 0.0
         upi_id = None
+        ref_no = None
         
         if is_transactional:
             credit_match = re.search(r'\b(credit|transfer|received|transferred|credited)\b', message, re.IGNORECASE)

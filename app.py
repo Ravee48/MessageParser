@@ -46,7 +46,7 @@ def predict_messages_with_details(input_dict, max_len):
             credit_match = re.search(r'\b(credit|transfer|received|transferred|credited)\b', message, re.IGNORECASE)
             amount_matches = re.findall(r'(?<!\d\.\d{3}\.)(?:Rs?\.?\s*|INR\.?\s*|USD\.?\s*|debited by\s*|credited by\s*)([\d,]+(?:\.\d+)?)', message)    # re.findall(r'(?<!\d\.\d{3}\.)Rs?\.?\s*([\d,]+(?:\.\d{2})?)', message)
             upi_id_match = re.search(r'([\w.-]+)@([\w.-]+)', message, re.IGNORECASE)
-            ref_no_match = re.findall(r'\bRef\s*No\.?\s+(\d{12})|\bRefNo\.?\s*(\d{12})', message, re.IGNORECASE)
+            ref_no_match = re.findall(r'\b(?:Ref(?:erence)?(?:\s*No)?|RefNo|Ref#|Ref:)\.?\s*:?\s*(\d{12})', message, re.IGNORECASE)
 
             # Get currency type to check if it's USD
             currency_match = re.search(r'(USD)', message, re.IGNORECASE)
@@ -65,7 +65,7 @@ def predict_messages_with_details(input_dict, max_len):
             try:
                 transaction_type = "Credit" if credit_match else "Debit"
                 upi_id = upi_id_match[0] if upi_id_match else None
-                ref_no = ref_no_match[0][0] if ref_no_match else None
+                ref_no = ref_no_match[0] if ref_no_match else None
             except Exception as e:
                 print(f"Error extracting transaction_type, upi_id or ref_no: {e}")
                 transaction_type = None

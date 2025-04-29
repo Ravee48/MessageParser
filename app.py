@@ -15,7 +15,7 @@ tokenizer = None
 def load_model_and_tokenizer():
     global model, tokenizer
     if model is None:
-        model_path = './Model/20250407_best_model_1_138_NoiseNotRemoved.keras'
+        model_path = './Model/20250429_500.keras'
         model = load_model(model_path)
     
     if tokenizer is None:
@@ -86,7 +86,7 @@ def predict_messages_with_details(input_dict, max_len):
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.get_json()
-    max_len = 138  # Set your max_len here
+    max_len = 500  # Set your max_len here
     predictions = predict_messages_with_details(data, max_len)
     return jsonify(predictions)
 

@@ -43,7 +43,7 @@ def predict_messages_with_details(input_dict, max_len):
         ref_no = None
         
         if is_transactional:
-            credit_match = re.search(r'\b(credit|transfer|received|transferred|credited)\b', message, re.IGNORECASE)
+            credit_match = re.search(r'\b(credit|transfer|received|transferred|deposited|credited)\b', message, re.IGNORECASE)
             amount_matches = re.findall(r'(?<!\d\.\d{3}\.)(?:Rs?\.?\s*|INR\.?\s*|USD\.?\s*|debited by\s*|credited by\s*)([\d,]+(?:\.\d+)?)', message)    # re.findall(r'(?<!\d\.\d{3}\.)Rs?\.?\s*([\d,]+(?:\.\d{2})?)', message)
             upi_id_match = re.search(r'([\w.-]+)@([\w.-]+)', message, re.IGNORECASE)
             ref_no_match = re.findall(r'\b(?:Ref(?:erence)?(?:\s*No)?|RefNo|Ref#|Ref:)\.?\s*:?\s*(\d{12})', message, re.IGNORECASE)
